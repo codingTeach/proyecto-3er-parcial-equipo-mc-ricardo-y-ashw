@@ -236,20 +236,90 @@
                     datasets: [{
                         label: 'Cantidad de Reportes por Prioridad',
                         data: [data.low, data.mid, data.high, data.critical],
-                        backgroundColor: ['#d4edda', '#fff3cd', '#f8d7da', '#f8d7da'],
-                        borderColor: ['#c3e6cb', '#ffeeba', '#f5c6cb', '#f5c6cb'],
+                        backgroundColor: ['#d4edda', '#fff3cd', '#f8d7da', '#f5a6a6'], // Colores para cada barra
+                        borderColor: ['#c3e6cb', '#ffeeba', '#f5c6cb', '#f08080'], // Bordes para cada barra
                         borderWidth: 1
                     }]
                 },
                 options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
+                    responsive: true, // La gráfica se ajusta al tamaño del contenedor
+                    maintainAspectRatio: false, // Permite ajustar la proporción de la gráfica
+                    plugins: {
+                        legend: {
+                            display: false, // Mostrar la leyenda
+                            position: 'top', // Colocar la leyenda en la parte superior
+                            labels: {
+                                font: {
+                                    size: 14
+                                },
+                                color: '#333'
+                            }
+                        },
+                        tooltip: {
+                            enabled: true, // Mostrar detalles al pasar el cursor
+                            backgroundColor: 'rgba(0, 0, 0, 0.7)', // Fondo del tooltip
+                            titleFont: {
+                                size: 14,
+                                weight: 'bold'
+                            },
+                            bodyFont: {
+                                size: 12
+                            },
+                            padding: 10
                         }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Prioridades', // Etiqueta descriptiva para el eje X
+                                color: '#555', // Color del texto
+                                font: {
+                                    size: 16,
+                                    weight: 'bold'
+                                }
+                            },
+                            ticks: {
+                                color: '#333', // Color de los valores del eje
+                                font: {
+                                    size: 14
+                                }
+                            },
+                            grid: {
+                                display: false // Ocultar las líneas de la cuadrícula en el eje X
+                            }
+                        },
+                        y: {
+                            beginAtZero: true, // Iniciar desde 0
+                            title: {
+                                display: true,
+                                text: 'Cantidad de Reportes', // Etiqueta descriptiva para el eje Y
+                                color: '#555', // Color del texto
+                                font: {
+                                    size: 16,
+                                    weight: 'bold'
+                                }
+                            },
+                            ticks: {
+                                stepSize: 1, // Incrementos de 1 en el eje Y
+                                color: '#333', // Color de los valores del eje
+                                font: {
+                                    size: 14
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(200, 200, 200, 0.2)', // Color tenue para la cuadrícula
+                                lineWidth: 1
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 1000, // Duración de la animación en milisegundos
+                        easing: 'easeOutQuart' // Efecto de animación
                     }
-                    
                 }
             });
+            
 
             // Actualizar el gráfico de etiquetas
             
