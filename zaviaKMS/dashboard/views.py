@@ -41,7 +41,7 @@ def reports(request, ticket_id=None):
         form = ReportsForm(request.POST, instance=ticket)  # Usamos el ticket existente si se edita
         if form.is_valid():
             tags = form.cleaned_data.get('tags', [])
-            form.instance.tags = tags  # Asignar las etiquetas al ticket
+            form.instance.tags = tags  # Asignar las etiquetaas al ticket
 
             # Si estamos editando un ticket existente
             if ticket:
@@ -64,7 +64,6 @@ def reports(request, ticket_id=None):
     recent_tickets = Report.objects.all().order_by('-created_at')[:2]
     tickets = Report.objects.all()
 
-    # Renderiza la vista
     return render(request, 'reports/page/reports.html', {
         'form': form,
         'page_title': 'Reports',
@@ -125,28 +124,8 @@ def settings(request):
     })
 
     
-@login_required
-def barras_report(request):
-    user = request.user
-    reportes = Report.objects.all()
-    reportes_count = reportes.count()
-    reportes_wip = reportes.filter(status='WIP').count()
-    reportes_done = reportes.filter(status='DONE').count()
-    reportes_closed = reportes.filter(status='CLOSED').count()
-    reportes_critical = reportes.filter(priority='critical').count()
-    reportes_high = reportes.filter(priority='high').count()
-    reportes_mid = reportes.filter(priority='mid').count()
-    reportes_low = reportes.filter(priority='low').count()
-    return JsonResponse({
-        'reportes_count':reportes_count,
-        'reportes_wip':reportes_wip,
-        'reportes_done':reportes_done,
-        'reportes_closed':reportes_closed,
-        'reportes_critical':reportes_critical,
-        'reportes_high':reportes_high,
-        'reportes_mid':reportes_mid,
-        'reportes_low':reportes_low,
-    })
     
+    
+
 
     

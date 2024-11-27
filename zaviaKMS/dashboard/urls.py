@@ -15,5 +15,3 @@ urlpatterns = [
     path('notifications/',views.notifications,name='notifications'),
     path('ajax/reportes', views.barras_report, name='barras_reportes'),
 ]
-
-
