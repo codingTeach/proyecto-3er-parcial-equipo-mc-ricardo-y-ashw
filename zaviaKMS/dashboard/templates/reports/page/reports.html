@@ -21,6 +21,19 @@
                 <div class="panel">
                     <div class="panel-body">
                         <p>Panel para los registros recientes de tickets.</p>
+                        <div class="list-group">
+                            {% for ticket in recent_tickets %}
+                                <div class="list-group-item">
+                                    <h5 class="mb-1">{{ ticket.title }}</h5>
+                                    <p class="mb-1">{{ ticket.description }}</p>
+                                    <small>Status: {{ ticket.status }} | Created By: {{ ticket.created_by.username }}</small>
+                                </div>
+                            {% empty %}
+                                <div class="list-group-item">
+                                    <p>No recent tickets available.</p>
+                                </div>
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -50,6 +63,27 @@
                 </div>
             </div>
         </div>
+
+        <!-- Mostrar todos los tickets registrados -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <h2>All Registered Tickets</h2>
+                <div class="list-group">
+                    {% for ticket in tickets %}
+                        <div class="list-group-item">
+                            <h5 class="mb-1">{{ ticket.title }}</h5>
+                            <p class="mb-1">{{ ticket.description }}</p>
+                            <small>Status: {{ ticket.status }} | Created By: {{ ticket.created_by.username }}</small>
+                        </div>
+                    {% empty %}
+                        <div class="list-group-item">
+                            <p>No tickets registered yet.</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <!-- Incluir el modal -->
