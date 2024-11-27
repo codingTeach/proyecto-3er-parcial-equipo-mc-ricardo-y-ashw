@@ -1,0 +1,109 @@
+<div class="modal fade" id="addTicketModal" tabindex="-1" aria-labelledby="addTicketModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!-- Título dinámico del modal -->
+                <h5 class="modal-title" id="addTicketModalLabel">
+                    {% if ticket %}Modify{% else %}Add New{% endif %} Issue Ticket
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="margin-left: 20px;">
+                <!-- Formulario que manejará la creación o modificación -->
+                <form method="post" enctype="multipart/form-data" 
+                      action="{% if ticket %}{% url 'reports' ticket.id %}{% else %}{% url 'reports' %}{% endif %}">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-8">
+                            <!-- Título -->
+                            <div class="mb-3">
+                                <label for="id_title" class="form-label">Title</label>
+                                <input type="text" name="title" id="id_title" class="form-control" 
+                                    value="{% if ticket %}{{ ticket.title }}{% endif %}" 
+                                    placeholder="Enter ticket title" required>
+                            </div>
+
+                            <!-- Created By -->
+                            <div class="mb-3">
+                                <label for="id_created_by" class="form-label">Created By</label>
+                                {{ form.created_by }}
+                            </div>
+
+                            <!-- Assigned To -->
+                            <div class="mb-3">
+                                <label for="id_assigned_to" class="form-label">Assigned To</label>
+                                {{ form.assigned_to }}
+                            </div>
+
+                            <!-- Affected Product -->
+                            <div class="mb-3">
+                                <label for="id_affected_product" class="form-label">Affected Product</label>
+                                {{ form.affected_product }}
+                            </div>
+
+                            <!-- Description -->
+                            <div class="mb-3">
+                                <label for="id_description" class="form-label">Description</label>
+                                {{ form.description }}
+                            </div>
+
+                            <!-- Priority -->
+                            <div class="mb-3">
+                                <label for="id_priority" class="form-label">Priority</label>
+                                {{ form.priority }}
+                            </div>
+
+                            <!-- Tags -->
+                            <div class="mb-3" style="margin-top: 20px;">
+                                <label class="form-label">Tags</label>
+                                <div class="d-flex gap-2">
+                                    {% for choice, label in form.fields.tags.choices %}
+                                        <div class="form-check">
+                                            <input type="checkbox" name="tags" id="tag_{{ choice }}" value="{{ choice }}"
+                                                   class="form-check-input" 
+                                                   {% if choice in form.initial.tags %}checked{% endif %}>
+                                            <label for="tag_{{ choice }}" class="form-check-label">{{ label }}</label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Selector de ticket para modo Modify (solo si no hay un ticket en contexto) -->
+                        {% if not ticket %}
+                        <div class="col-md-8 mb-3">
+                            <label for="id_ticket" class="form-label">Select a Ticket to Modify</label>
+                            <select name="ticket" id="id_ticket" class="form-control">
+                                <option value="" disabled selected>Select a ticket</option>
+                                {% for t in tickets %}
+                                    <option value="{{ t.id }}">{{ t.title }} - {{ t.assigned_to.username }} - {{ t.affected_product }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        {% endif %}
+
+                        <!-- Botones de acción -->
+                        <div class="mb-4">
+                            <button type="submit" class="btn btn-primary me-2">
+                                {% if ticket %}Modify{% else %}Add{% endif %}
+                            </button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Mostrar mensajes si los hay -->
+{% if messages %}
+<div>
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+</div>
+{% endif %}

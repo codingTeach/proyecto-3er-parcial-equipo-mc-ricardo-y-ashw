@@ -1,0 +1,186 @@
+<div class="modal fade" id="ticketModal" tabindex="-1" aria-labelledby="ticketModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ticketModalLabel">Add New Ticket</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" enctype="multipart/form-data" action="{% url 'reports' %}">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-8">
+                            <!-- Selección de ticket para modificar -->
+                            <div id="ticketSelector" class="mb-3 d-none">
+                                <label for="id_select_ticket" class="form-label">Select a Ticket to Modify</label>
+                                <select name="ticket" id="id_select_ticket" class="form-select">
+                                    <option value="" disabled selected>Select a ticket</option>
+                                    {% for t in tickets %}
+                                        <option value="{{ t.id }}"
+                                                data-title="{{ t.title }}"
+                                                data-created_by="{{ t.created_by.id }}"
+                                                data-assigned_to="{{ t.assigned_to.id }}"
+                                                data-affected_product="{{ t.affected_product }}"
+                                                data-description="{{ t.description }}"
+                                                data-priority="{{ t.priority }}"
+                                                data-tags="{{ t.tags|join:', ' }}">
+                                            {{ t.title }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="id_title" class="form-label">Title</label>
+                                <input type="text" name="title" id="id_title" class="form-control" 
+                                       value="{% if ticket %}{{ ticket.title }}{% endif %}" 
+                                       placeholder="Enter ticket title" required>
+                            </div>
+
+                            <!-- Created By -->
+                            <div class="mb-3">
+                                <label for="id_created_by" class="form-label">Created By</label>
+                                {{ form.created_by }}
+                            </div>
+
+                            <!-- Assigned To -->
+                            <div class="mb-3">
+                                <label for="id_assigned_to" class="form-label">Assigned To</label>
+                                {{ form.assigned_to }}
+                            </div>
+
+                            <!-- Affected Product -->
+                            <div class="mb-3">
+                                <label for="id_affected_product" class="form-label">Affected Product</label>
+                                {{ form.affected_product }}
+                            </div>
+
+                            <!-- Description -->
+                            <div class="mb-3">
+                                <label for="id_description" class="form-label">Description</label>
+                                {{ form.description }}
+                            </div>
+
+                            <!-- Priority -->
+                            <div class="mb-3">
+                                <label for="id_priority" class="form-label">Priority</label>
+                                {{ form.priority }}
+                            </div>
+
+                            <!-- Tags -->
+                            <div class="mb-3" style="margin-top: 20px;">
+                                <label class="form-label">Tags</label>
+                                <div class="d-flex gap-2">
+                                    {% for choice, label in form.fields.tags.choices %}
+                                        <div class="form-check">
+                                            <input type="checkbox" name="tags" id="tag_{{ choice }}" value="{{ choice }}"
+                                                   class="form-check-input" 
+                                                   {% if choice in form.initial.tags %}checked{% endif %}>
+                                            <label for="tag_{{ choice }}" class="form-check-label">{{ label }}</label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Botones de acción -->
+                        <div class="mt-3">
+                            <button type="submit" class="btn btn-primary" id="submitButton">Add Ticket</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const ticketModal = document.getElementById('ticketModal');
+        const modalLabel = document.getElementById('ticketModalLabel');
+        const ticketSelector = document.getElementById('ticketSelector');
+        const submitButton = document.getElementById('submitButton');
+        const titleField = document.getElementById('id_title');
+        const createdByField = document.getElementById('id_created_by');
+        const assignedToField = document.getElementById('id_assigned_to');
+        const affectedProductField = document.getElementById('id_affected_product');
+        const descriptionField = document.getElementById('id_description');
+        const priorityField = document.getElementById('id_priority');
+        const ticketDropdown = document.getElementById('id_select_ticket');
+        const tagCheckboxes = document.querySelectorAll('input[name="tags"]'); // Obtener todos los checkboxes de tags
+
+        ticketModal.addEventListener('show.bs.modal', (event) => {
+            const button = event.relatedTarget; // El botón que abre el modal
+            const mode = button.getAttribute('data-mode'); // Obtener el modo (add o modify)
+
+            if (mode === 'add') {
+                modalLabel.textContent = 'Add New Ticket';
+                ticketSelector.classList.add('d-none'); // Ocultar el selector de tickets
+                titleField.value = ''; // Limpiar el campo de título
+                submitButton.textContent = 'Add Ticket'; // Cambiar el texto del botón
+                createdByField.value = ''; // Limpiar el campo de 'created_by'
+                assignedToField.value = ''; // Limpiar el campo de 'assigned_to'
+                affectedProductField.value = ''; // Limpiar el campo de producto afectado
+                descriptionField.value = ''; // Limpiar la descripción
+                priorityField.value = ''; // Limpiar la prioridad
+                tagCheckboxes.forEach((checkbox) => {
+                    checkbox.checked = false; // Desmarcar los checkboxes de tags
+                });
+            } else if (mode === 'modify') {
+                modalLabel.textContent = 'Modify Ticket';
+                ticketSelector.classList.remove('d-none'); // Mostrar el selector de tickets
+                submitButton.textContent = 'Modify Ticket'; // Cambiar el texto del botón
+
+                // Cuando se selecciona un ticket, llenar los campos
+                ticketDropdown.addEventListener('change', () => {
+                    const selectedOption = ticketDropdown.options[ticketDropdown.selectedIndex];
+
+                    // Cargar los valores de los campos
+                    const title = selectedOption.getAttribute('data-title');
+                    const createdBy = selectedOption.getAttribute('data-created_by');
+                    const assignedTo = selectedOption.getAttribute('data-assigned_to');
+                    const affectedProduct = selectedOption.getAttribute('data-affected_product');
+                    const description = selectedOption.getAttribute('data-description');
+                    const priority = selectedOption.getAttribute('data-priority');
+                    const tags = selectedOption.getAttribute('data-tags'); // Tags como lista de valores
+
+                    // Rellenar los campos del modal
+                    titleField.value = title || '';
+                    createdByField.value = createdBy || '';
+                    assignedToField.value = assignedTo || '';
+                    affectedProductField.value = affectedProduct || '';
+                    descriptionField.value = description || '';
+                    priorityField.value = priority || '';
+
+                    // Marcar los checkboxes de tags
+                    if (tags) {
+                        const tagArray = tags.split(','); // Suponiendo que los tags se pasan como una lista separada por comas
+                        tagCheckboxes.forEach((checkbox) => {
+                            checkbox.checked = tagArray.includes(checkbox.value);
+                        });
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const ticketModal = document.getElementById('ticketModal');
+
+        // Limpiar el formulario al cerrar el modal
+        ticketModal.addEventListener('hidden.bs.modal', () => {
+            const form = ticketModal.querySelector('form');
+            form.reset(); // Restablece todos los campos del formulario
+
+            // Además, desmarca los checkboxes manualmente si es necesario
+            const checkboxes = form.querySelectorAll('input[name="tags"]');
+            checkboxes.forEach((checkbox) => {
+                checkbox.checked = false;
+            });
+        });
+    });
+</script>

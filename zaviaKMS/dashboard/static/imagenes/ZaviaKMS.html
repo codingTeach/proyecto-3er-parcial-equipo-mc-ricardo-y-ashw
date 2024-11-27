@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<!-- saved from url=(0030)http://127.0.0.1:8000/reports/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZaviaKMS</title>
+    <link href="./ZaviaKMS_files/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./ZaviaKMS_files/styles.css">
+    <!-- Bootstrap CSS -->
+    <link href="./ZaviaKMS_files/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap JS (incluye Popper.js) -->
+    <script src="./ZaviaKMS_files/bootstrap.bundle.min.js.descarga"></script>
+</head>
+<body>
+    <!-- Wrapper Contenedor principal -->
+    <div id="main-container">
+        <!-- Sidebar -->
+        <div id="sidebar" class="sidebar expanded">
+            <div class="logo">Zavia KMS</div>
+            <!-- Menu Items -->
+            <button class="menu-item test" onclick="window.location.href=&#39;/dashboard/&#39;">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </button>
+            <button class="menu-item" onclick="window.location.href=&#39;/reports/&#39;">
+                <i class="fas fa-flag"></i>
+                <span>Reports</span>
+            </button>
+            <button class="menu-item" onclick="window.location.href=&#39;/documentation/&#39;">
+                <i class="fas fa-file-alt"></i>
+                <span>Documentation</span>
+            </button>
+
+            <!-- Toggle Button -->
+            <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+        </div>
+
+        <!-- Content -->
+        <div id="content-container" class="container-fluid" style="margin-left: 250px;">
+            <!-- Header: El contenido del header se inyectará aquí -->
+            
+<link rel="stylesheet" href="./ZaviaKMS_files/styles.css">
+
+<header class="header-container sidebar-expanded">
+    <!-- Título del Dashboard -->
+    <div class="header-title">
+        Reports
+    </div>
+  
+    <!-- Sección derecha con notificaciones y perfil -->
+    <div class="header-right">
+      <!-- Dropdown del perfil -->
+      <div class="profile-dropdown">
+        <img src="./ZaviaKMS_files/profile-pic.png" alt="Profile" class="profile-pic" id="profile-pic">
+        <div class="profile-info">
+            <span class="username">dulleryew</span> <!-- Muestra el nombre de usuario -->
+            <span class="role">developer</span> <!-- Muestra el rol del usuario -->
+        </div>
+        <div class="dropdown-menu">
+          <ul>
+            <li class="element">
+              <button class="dropdown-btn" onclick="window.location.href=&#39;/notifications/&#39;">Notifications</button>
+            </li>
+            <li class="element">
+              <button class="dropdown-btn" onclick="window.location.href=&#39;/settings/&#39;">Settings</button>
+            </li>
+            <li class="element">
+              <button class="dropdown-btn" onclick="window.location.href=&#39;/logout/&#39;">Logout</button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+</header>
+<script src="./ZaviaKMS_files/sidebar.js.descarga"></script>
+
+            
+<div class="page-content">
+    <div class="container">
+        <div class="row">
+            <!-- Columna para "Recent" -->
+            <div class="col-lg-8">
+                <h2>Recent</h2>
+                <div class="panel">
+                    <div class="panel-body">
+                        <p>Panel para los registros recientes de tickets.</p>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Columna vacía para separación -->
+            <div class="col-lg-1"></div> <!-- Columna vacía 1 -->
+            <div class="col-lg-1"></div> <!-- Columna vacía 2 -->
+            <div class="col-lg-1"></div> <!-- Columna vacía 3 -->
+
+            <!-- Columna para "Quick Actions" -->
+            <div class="col-lg-4 d-flex justify-content-end">
+                <div class="text-end">
+                    <h2>Quick Actions</h2>
+
+                    <!-- Botón para añadir un nuevo ticket -->
+                    <div class="mb-3">
+                        <h6>Add a new issue ticket</h6>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ticketModal" data-mode="add">
+                            Add New Ticket
+                        </button>
+                    </div>
+
+                    <!-- Botón para modificar un ticket existente -->
+                    <div class="mb-3">
+                        <h6>Modify an issue ticket</h6>
+                        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#ticketModal" data-mode="modify">
+                            Modify Ticket
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Incluir el modal -->
+    <div class="modal fade" id="ticketModal" tabindex="-1" aria-labelledby="ticketModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!-- Título dinámico del modal -->
+                <h5 class="modal-title" id="ticketModalLabel">Add New Ticket</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Contenido del modal -->
+                <form method="post" enctype="multipart/form-data" action="http://127.0.0.1:8000/reports/">
+                    <input type="hidden" name="csrfmiddlewaretoken" value="lTJfuORf3xcw9PQLI4B3O4dq6Rlpi2qLQk43cBYfcTbyHYk4M9UTYjlQ86T6WCN1">
+                    <div class="row">
+                        <div class="col-md-8">
+                    <!-- Selección de ticket para modificar (visible solo en modo Modify) -->
+                        <div id="ticketSelector" class="mb-3 d-none">
+                            <label for="id_select_ticket" class="form-label">Select a Ticket to Modify</label>
+                            <select name="ticket" id="id_select_ticket" class="form-select">
+                                <option value="" disabled="" selected="">Select a ticket</option>
+                                
+                                    <option value="1" data-title="Test ticket">Test ticket</option>
+                                
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="id_title" class="form-label">Title</label>
+                            <input type="text" name="title" id="id_title" class="form-control" value="" placeholder="Enter ticket title" required="">
+                        </div>
+
+                        <!-- Created By -->
+                        <div class="mb-3">
+                            <label for="id_created_by" class="form-label">Created By</label>
+                            <select name="created_by" class="form-control" required="" id="id_created_by">
+  <option value="">---------</option>
+
+  <option value="1" selected="">dulleryew</option>
+
+</select>
+                        </div>
+
+                        <!-- Assigned To -->
+                        <div class="mb-3">
+                            <label for="id_assigned_to" class="form-label">Assigned To</label>
+                            <select name="assigned_to" class="form-control" id="id_assigned_to">
+  <option value="" selected="">---------</option>
+
+  <option value="1">dulleryew</option>
+
+</select>
+                        </div>
+
+                        <!-- Affected Product -->
+                        <div class="mb-3">
+                            <label for="id_affected_product" class="form-label">Affected Product</label>
+                            <input type="text" name="affected_product" class="form-control" placeholder="Enter the product name" maxlength="150" required="" id="id_affected_product">
+                        </div>
+
+                        <!-- Description -->
+                        <div class="mb-3">
+                            <label for="id_description" class="form-label">Description</label>
+                            <textarea name="description" cols="40" rows="4" class="form-control" placeholder="Provide a detailed description" required="" id="id_description"></textarea>
+                        </div>
+
+                        <!-- Priority -->
+                        <div class="mb-3">
+                            <label for="id_priority" class="form-label">Priority</label>
+                            <select name="priority" class="form-select" required="" id="id_priority">
+  <option value="" selected="">---------</option>
+
+  <option value="low">Low</option>
+
+  <option value="mid">Mid</option>
+
+  <option value="high">High</option>
+
+  <option value="critical">Critical</option>
+
+</select>
+                        </div>
+
+                        <!-- Tags -->
+                        <div class="mb-3" style="margin-top: 20px;">
+                            <label class="form-label">Tags</label>
+                            <div class="d-flex gap-2">
+                                
+                                    <div class="form-check">
+                                        <input type="checkbox" name="tags" id="tag_bug" value="bug" class="form-check-input">
+                                        <label for="tag_bug" class="form-check-label">Bug</label>
+                                    </div>
+                                
+                                    <div class="form-check">
+                                        <input type="checkbox" name="tags" id="tag_feature" value="feature" class="form-check-input">
+                                        <label for="tag_feature" class="form-check-label">Feature</label>
+                                    </div>
+                                
+                                    <div class="form-check">
+                                        <input type="checkbox" name="tags" id="tag_update" value="update" class="form-check-input">
+                                        <label for="tag_update" class="form-check-label">Update</label>
+                                    </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botones de acción -->
+                    <div class="mt-3">
+                        <button type="submit" class="btn btn-primary" id="submitButton">Add Ticket</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </form></div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Mostrar mensajes si los hay -->
+
+
+<!-- Script para alternar entre Add y Modify -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const ticketModal = document.getElementById('ticketModal');
+        const modalLabel = document.getElementById('ticketModalLabel');
+        const ticketSelector = document.getElementById('ticketSelector');
+        const submitButton = document.getElementById('submitButton');
+        const titleField = document.getElementById('id_title');
+        const ticketDropdown = document.getElementById('id_select_ticket');
+
+        ticketModal.addEventListener('show.bs.modal', (event) => {
+            const button = event.relatedTarget; // Botón que abre el modal
+            const mode = button.getAttribute('data-mode'); // Modo del modal
+
+            if (mode === 'add') {
+                modalLabel.textContent = 'Add New Ticket';
+                ticketSelector.classList.add('d-none'); // Ocultar selector de tickets
+                titleField.value = ''; // Limpiar campo de título
+                submitButton.textContent = 'Add Ticket'; // Cambiar texto del botón
+            } else if (mode === 'modify') {
+                modalLabel.textContent = 'Modify Ticket';
+                ticketSelector.classList.remove('d-none'); // Mostrar selector de tickets
+                titleField.value = ''; // Limpiar título por defecto
+                submitButton.textContent = 'Modify Ticket'; // Cambiar texto del botón
+
+                // Cuando el usuario selecciona un ticket, cargar datos
+                ticketDropdown.addEventListener('change', () => {
+                    const selectedOption = ticketDropdown.options[ticketDropdown.selectedIndex];
+                    const title = selectedOption.getAttribute('data-title');
+                    titleField.value = title || ''; // Rellenar título del ticket seleccionado
+                });
+            }
+        });
+    });
+</script>
+
+</div>
+
+        </div>
+    
+
+    <script src="./ZaviaKMS_files/header.js.descarga"></script>
+    <script src="./ZaviaKMS_files/sidebar.js.descarga"></script>
+
+
+</body></html>

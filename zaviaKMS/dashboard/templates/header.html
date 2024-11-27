@@ -1,0 +1,40 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+<header class="header-container">
+    <!-- Título del Dashboard -->
+    <div class="header-title">
+        {{ page_title }}
+    </div>
+  
+    <!-- Sección derecha con notificaciones y perfil -->
+    <div class="header-right">
+      <!-- Dropdown del perfil -->
+      <div class="profile-dropdown">
+        <img
+          src="{% static 'imagenes/profile-pic.png' %}"
+          alt="Profile"
+          class="profile-pic"
+          id="profile-pic"
+        />
+        <div class="profile-info">
+            <span class="username">{{ username }}</span> <!-- Muestra el nombre de usuario -->
+            <span class="role">{{ role }}</span> <!-- Muestra el rol del usuario -->
+        </div>
+        <div class="dropdown-menu">
+          <ul>
+            <li class="element">
+              <button class="dropdown-btn" onclick="window.location.href='{% url 'notifications' %}'">Notifications</button>
+            </li>
+            <li class="element">
+              <button class="dropdown-btn" onclick="window.location.href='{% url 'settings' %}'">Settings</button>
+            </li>
+            <li class="element">
+              <button class="dropdown-btn" onclick="window.location.href='{% url 'logout' %}'">Logout</button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+</header>
+<script src="{% static 'js/sidebar.js' %}"></script>

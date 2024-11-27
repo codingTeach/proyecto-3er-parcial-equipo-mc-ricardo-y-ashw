@@ -1,0 +1,58 @@
+{% extends 'sidebar.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="page-content">
+    {% if messages %}
+    <div class="mt-4">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <div class="container">
+        <div class="row">
+            <!-- Columna para "Recent" -->
+            <div class="col-lg-8">
+                <h2>Recent</h2>
+                <div class="panel">
+                    <div class="panel-body">
+                        <p>Panel para los registros recientes de tickets.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Columna para "Quick Actions" -->
+            <div class="col-lg-4 d-flex justify-content-end">
+                <div class="text-end">
+                    <h2>Quick Actions</h2>
+
+                    <!-- Botón para añadir un nuevo ticket -->
+                    <div class="mb-3">
+                        <h6>Add a new issue ticket</h6>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#ticketModal" data-mode="add">
+                            Add New Ticket
+                        </button>
+                    </div>
+
+                    <!-- Botón para modificar un ticket existente -->
+                    <div class="mb-3">
+                        <h6>Modify an issue ticket</h6>
+                        <button type="button" class="btn btn-warning" data-bs-toggle="modal"
+                            data-bs-target="#ticketModal" data-mode="modify">
+                            Modify Ticket
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Incluir el modal -->
+    {% include 'reports/forms/new_ticket_form.html' %}
+</div>
+{% endblock %}
