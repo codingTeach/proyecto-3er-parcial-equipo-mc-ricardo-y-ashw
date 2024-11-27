@@ -13,6 +13,7 @@ urlpatterns = [
     path('login/', views.LoginForm.as_view(), name='login'),
     path('settings/',views.settings,name='settings'),
     path('notifications/',views.notifications,name='notifications'),
+    path('get_info_reportes/',views.get_info_reportes,name='get_info_reportes'),
 ]
 
 

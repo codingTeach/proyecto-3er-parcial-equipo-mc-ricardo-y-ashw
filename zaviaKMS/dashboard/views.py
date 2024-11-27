@@ -1,3 +1,5 @@
+import json
+from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from .forms import UserRegisterForm, LoginForm, EditProfile,ReportsForm,CustomEditProfileForm
@@ -118,10 +120,33 @@ def settings(request):
         'role':user.role,
         'form':form
     })
-
     
     
+@login_required
+def get_info_reportes(request):
+    user = request.user
+    reportes = Report.objects.all()
+    low = Report.objects.filter(priority='low').count()
+    mid = Report.objects.filter(priority='mid').count()
+    high = Report.objects.filter(priority='high').count()
+    critical = Report.objects.filter(priority='critical').count()
+    bug = sum(1 for report in reportes if 'bug' in report.tags)
+    feature = sum(1 for report in reportes if 'feature' in report.tags)
+    update = sum(1 for report in reportes if 'update' in report.tags)
+    reportes = reportes.count()
     
-
-
+    data = {
+        'reportes': reportes,
+        'low': low,
+        'mid': mid,
+        'high': high,
+        'critical': critical,
+        'bug': bug,
+        'feature': feature,
+        'update': update,
+    }
+    print(data)
+    data = JsonResponse(data)
+    data['X-Frame-Options'] = 'DENY'
     
+    return data
