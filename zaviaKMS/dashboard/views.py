@@ -31,34 +31,40 @@ def documentation(request):
 @login_required
 def reports(request, ticket_id=None):
     user = request.user
-    ticket = None
+    ticket = None  # Inicializamos como None en caso de crear un ticket
 
+    # Si se pasa un ticket_id, se obtiene el ticket para editarlo
     if ticket_id:
         ticket = get_object_or_404(Report, id=ticket_id)
 
     if request.method == "POST":
-        form = ReportsForm(request.POST, instance=ticket)
+        form = ReportsForm(request.POST, instance=ticket)  # Usamos el ticket existente si se edita
         if form.is_valid():
             tags = form.cleaned_data.get('tags', [])
-            form.instance.tags = tags
+            form.instance.tags = tags  # Asignar las etiquetas al ticket
 
+            # Si estamos editando un ticket existente
             if ticket:
                 form.save()
                 messages.success(request, "The ticket was updated successfully!")
-            else:
+            else:  # Si estamos creando un ticket nuevo
                 form.instance.created_by = user
-                form.instance.status = 'WIP'  # Establece el estado por defecto
+                form.instance.status = 'WIP'  # Asignamos el estado por defecto como 'WIP'
                 form.save()
                 messages.success(request, "The ticket was created successfully!")
-            return redirect('reports')
-        else:
-            messages.error(request, "There was an error processing the form. Please try again.")
-    else:
-        form = ReportsForm(instance=ticket)
+            return redirect('reports')  # Redirige al listado de tickets
 
+        else:
+            messages.error(request, "There was an error processing the form. Please try again.")  # Si hay error en el formulario
+
+    else:
+        form = ReportsForm(instance=ticket)  # Si es GET, se carga el formulario vacío o con el ticket a editar
+
+    # Cargar los últimos 2 tickets recientes para mostrar en la vista
     recent_tickets = Report.objects.all().order_by('-created_at')[:2]
     tickets = Report.objects.all()
 
+    # Renderiza la vista
     return render(request, 'reports/page/reports.html', {
         'form': form,
         'page_title': 'Reports',
