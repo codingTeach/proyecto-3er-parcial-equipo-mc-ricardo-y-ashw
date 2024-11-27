@@ -5,6 +5,8 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from .models import UserApp, Report  # Asegúrate de importar tu modelo UserApp
 from django.contrib.auth import update_session_auth_hash
+from django.http import JsonResponse
+
 
 def raiz(request):
     return render(request, 'raiz.html')
@@ -125,8 +127,28 @@ def settings(request):
     })
 
     
+@login_required
+def barras_report(request):
+    user = request.user
+    reportes = Report.objects.all()
+    reportes_count = reportes.count()
+    reportes_wip = reportes.filter(status='WIP').count()
+    reportes_done = reportes.filter(status='DONE').count()
+    reportes_closed = reportes.filter(status='CLOSED').count()
+    reportes_critical = reportes.filter(priority='critical').count()
+    reportes_high = reportes.filter(priority='high').count()
+    reportes_mid = reportes.filter(priority='mid').count()
+    reportes_low = reportes.filter(priority='low').count()
+    return JsonResponse({
+        'reportes_count':reportes_count,
+        'reportes_wip':reportes_wip,
+        'reportes_done':reportes_done,
+        'reportes_closed':reportes_closed,
+        'reportes_critical':reportes_critical,
+        'reportes_high':reportes_high,
+        'reportes_mid':reportes_mid,
+        'reportes_low':reportes_low,
+    })
     
-    
-
 
     
