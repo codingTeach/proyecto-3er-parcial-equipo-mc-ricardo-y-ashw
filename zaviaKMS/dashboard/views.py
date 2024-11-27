@@ -5,8 +5,6 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from .models import UserApp, Report  # Asegúrate de importar tu modelo UserApp
 from django.contrib.auth import update_session_auth_hash
-from django.db.models import Q
-
 
 def raiz(request):
     return render(request, 'raiz.html')
@@ -33,34 +31,40 @@ def documentation(request):
 @login_required
 def reports(request, ticket_id=None):
     user = request.user
-    ticket = None
+    ticket = None  # Inicializamos como None en caso de crear un ticket
 
+    # Si se pasa un ticket_id, se obtiene el ticket para editarlo
     if ticket_id:
         ticket = get_object_or_404(Report, id=ticket_id)
 
     if request.method == "POST":
-        form = ReportsForm(request.POST, instance=ticket)
+        form = ReportsForm(request.POST, instance=ticket)  # Usamos el ticket existente si se edita
         if form.is_valid():
             tags = form.cleaned_data.get('tags', [])
-            form.instance.tags = tags
+            form.instance.tags = tags  # Asignar las etiquetas al ticket
 
+            # Si estamos editando un ticket existente
             if ticket:
                 form.save()
                 messages.success(request, "The ticket was updated successfully!")
-            else:
+            else:  # Si estamos creando un ticket nuevo
                 form.instance.created_by = user
-                form.instance.status = 'WIP'  # Establece el estado por defecto
+                form.instance.status = 'WIP'  # Asignamos el estado por defecto como 'WIP'
                 form.save()
                 messages.success(request, "The ticket was created successfully!")
-            return redirect('reports')
-        else:
-            messages.error(request, "There was an error processing the form. Please try again.")
-    else:
-        form = ReportsForm(instance=ticket)
+            return redirect('reports')  # Redirige al listado de tickets
 
+        else:
+            messages.error(request, "There was an error processing the form. Please try again.")  # Si hay error en el formulario
+
+    else:
+        form = ReportsForm(instance=ticket)  # Si es GET, se carga el formulario vacío o con el ticket a editar
+
+    # Cargar los últimos 2 tickets recientes para mostrar en la vista
     recent_tickets = Report.objects.all().order_by('-created_at')[:2]
     tickets = Report.objects.all()
 
+    # Renderiza la vista
     return render(request, 'reports/page/reports.html', {
         'form': form,
         'page_title': 'Reports',
@@ -121,8 +125,28 @@ def settings(request):
     })
 
     
+@login_required
+def barras_report(request):
+    user = request.user
+    reportes = Report.objects.all()
+    reportes_count = reportes.count()
+    reportes_wip = reportes.filter(status='WIP').count()
+    reportes_done = reportes.filter(status='DONE').count()
+    reportes_closed = reportes.filter(status='CLOSED').count()
+    reportes_critical = reportes.filter(priority='critical').count()
+    reportes_high = reportes.filter(priority='high').count()
+    reportes_mid = reportes.filter(priority='mid').count()
+    reportes_low = reportes.filter(priority='low').count()
+    return JsonResponse({
+        'reportes_count':reportes_count,
+        'reportes_wip':reportes_wip,
+        'reportes_done':reportes_done,
+        'reportes_closed':reportes_closed,
+        'reportes_critical':reportes_critical,
+        'reportes_high':reportes_high,
+        'reportes_mid':reportes_mid,
+        'reportes_low':reportes_low,
+    })
     
-    
-
 
     
