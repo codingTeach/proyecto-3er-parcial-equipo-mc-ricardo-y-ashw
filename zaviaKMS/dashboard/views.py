@@ -59,7 +59,10 @@ def reports(request, ticket_id=None):
         # Si es una solicitud GET, prepara el formulario con la instancia correspondiente
         form = ReportsForm(instance=ticket)
 
-    tickets = Report.objects.all()  # Cargar todos los tickets
+    # Obtener los 2 tickets más recientes
+    recent_tickets = Report.objects.all().order_by('-created_at')[:2]  # Asumiendo que 'created_at' es el campo de fecha de creación
+    tickets = Report.objects.all()  # Obtener todos los tickets
+
     return render(request, 'reports/page/reports.html', {
         'form': form,
         'page_title': 'Reports',
@@ -67,7 +70,9 @@ def reports(request, ticket_id=None):
         'role': user.role,
         'ticket': ticket,
         'tickets': tickets,
+        'recent_tickets': recent_tickets,  # Pasa los tickets recientes al template
     })
+
 
 
 @login_required
