@@ -1,4 +1,4 @@
-{% extends 'sidebar.html' %}
+{% extends 'sidebar.html' %} 
 {% load crispy_forms_tags %}
 
 {% block content %}
@@ -23,15 +23,15 @@
                         <p>Panel para los registros recientes de tickets.</p>
                         <div class="list-group">
                             {% for ticket in recent_tickets %}
-                                <div class="list-group-item">
-                                    <h5 class="mb-1">{{ ticket.title }}</h5>
-                                    <p class="mb-1">{{ ticket.description }}</p>
-                                    <small>Status: {{ ticket.status }} | Created By: {{ ticket.created_by.username }}</small>
-                                </div>
+                            <div class="list-group-item">
+                                <h5 class="mb-1">{{ ticket.title }}</h5>
+                                <p class="mb-1">{{ ticket.description }}</p>
+                                <small>Status: {{ ticket.status }} | Created By: {{ ticket.created_by.username }}</small>
+                            </div>
                             {% empty %}
-                                <div class="list-group-item">
-                                    <p>No recent tickets available.</p>
-                                </div>
+                            <div class="list-group-item">
+                                <p>No recent tickets available.</p>
+                            </div>
                             {% endfor %}
                         </div>
                     </div>
@@ -68,22 +68,66 @@
         <div class="row mt-5">
             <div class="col-12">
                 <h2>All Registered Tickets</h2>
-                <div class="list-group">
+                <div class="row">
                     {% for ticket in tickets %}
-                        <div class="list-group-item">
-                            <h5 class="mb-1">{{ ticket.title }}</h5>
-                            <p class="mb-1">{{ ticket.description }}</p>
-                            <small>Status: {{ ticket.status }} | Created By: {{ ticket.created_by.username }}</small>
+                    <div class="col-md-4 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ ticket.title }}</h5>
+                                <table class="table">
+                                    <tr>
+                                        <th>Description:</th>
+                                        <td>{{ ticket.description }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Status:</th>
+                                        <td>{{ ticket.status }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Created By:</th>
+                                        <td>{{ ticket.created_by.username }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Assigned To:</th>
+                                        <td>{{ ticket.assigned_to.username|default:"Not assigned" }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Affected Product:</th>
+                                        <td>{{ ticket.affected_product }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Priority:</th>
+                                        <td>
+                                            <span class="badge" style="background-color: 
+                                                {% if ticket.priority == 'Critical' %}
+                                                    red;
+                                                {% elif ticket.priority == 'High' %}
+                                                    yellow;
+                                                {% else %}
+                                                    green;
+                                                {% endif %}">
+                                                {{ ticket.priority }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Tags:</th>
+                                        <td>{{ ticket.tags }}</td>
+                                    </tr>
+                                </table>
+                            </div>
                         </div>
+                    </div>
                     {% empty %}
-                        <div class="list-group-item">
-                            <p>No tickets registered yet.</p>
+                    <div class="col-12">
+                        <div class="alert alert-info">
+                            No tickets registered yet.
                         </div>
+                    </div>
                     {% endfor %}
                 </div>
             </div>
         </div>
-
     </div>
 
     <!-- Incluir el modal -->

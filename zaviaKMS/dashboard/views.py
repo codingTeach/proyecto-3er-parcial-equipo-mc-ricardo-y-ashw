@@ -5,6 +5,8 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from .models import UserApp, Report  # Asegúrate de importar tu modelo UserApp
 from django.contrib.auth import update_session_auth_hash
+from django.db.models import Q
+
 
 def raiz(request):
     return render(request, 'raiz.html')
