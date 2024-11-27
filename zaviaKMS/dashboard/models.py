@@ -49,6 +49,11 @@ class Report(models.Model):
         ('update', 'Update'),
     ]
 
+    STATUS_CHOICES = [
+        ('WIP', 'Work in Progress'),
+        ('DONE', 'Done'),
+        ('CLOSED', 'Closed'),
+    ]    
     title = models.CharField(max_length=150, verbose_name='Title')  # Nuevo campo para el título
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -68,6 +73,7 @@ class Report(models.Model):
     description = models.TextField(verbose_name='Description')
     priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, verbose_name='Priority')
     tags = models.JSONField(default=list, verbose_name='Tags')  # Para almacenar múltiples etiquetas
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='WIP')  # Valor por defecto
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Created At')
     modified_at = models.DateTimeField(auto_now=True, verbose_name='Modified At')
 
