@@ -64,6 +64,19 @@
             </div>
         </div>
 
+        <!-- Barra de búsqueda -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <form method="get" action="{% url 'reports:list' %}">
+                    <div class="input-group">
+                        <input type="text" name="query" class="form-control" placeholder="Search tickets..."
+                               value="{{ request.GET.query|default_if_none:'' }}">
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <!-- Mostrar todos los tickets registrados -->
         <div class="row mt-5">
             <div class="col-12">
